@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.vsix
+.vscode-test/
+.mlens-test/
+
+# Dados locais de projetos Power BI usados em testes manuais — nunca versionar.
+.mlens/
+mlens-queries/
+teste-bireal/
+*.pbix
+*.pbit
+*.abf

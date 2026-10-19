@@ -1,0 +1,334 @@
+{
+  "name": "m-lens",
+  "displayName": "M Lens — Power Query Tools",
+  "description": "%description%",
+  "version": "0.2.0",
+  "publisher": "gabxw",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabxw/m-lens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gabxw/m-lens/issues"
+  },
+  "homepage": "https://github.com/gabxw/m-lens#readme",
+  "icon": "assets/icon.png",
+  "l10n": "./l10n",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Data Science"
+  ],
+  "keywords": [
+    "power query",
+    "powerquery",
+    "m language",
+    "power bi",
+    "power bi project",
+    "pbip",
+    "pbix",
+    "tmdl",
+    "fabric"
+  ],
+  "extensionDependencies": [
+    "powerquery.vscode-powerquery"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:powerquery",
+    "workspaceContains:**/*.pbip",
+    "workspaceContains:**/*.pq"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "powerquery",
+        "icon": {
+          "light": "./fileicons/powerquery-light.svg",
+          "dark": "./fileicons/powerquery.svg"
+        }
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mlens",
+          "title": "M Lens",
+          "icon": "assets/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "mlens": [
+        {
+          "id": "mlens.overview",
+          "name": "%view.overview%"
+        },
+        {
+          "id": "mlens.dataSources",
+          "name": "%view.dataSources%"
+        },
+        {
+          "id": "mlens.dependencies",
+          "name": "%view.dependencies%",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "mlens.overview",
+        "contents": "%welcome.noFolder%",
+        "when": "workbenchState == empty"
+      },
+      {
+        "view": "mlens.overview",
+        "contents": "%welcome.noProject%",
+        "when": "workbenchState != empty"
+      },
+      {
+        "view": "mlens.dataSources",
+        "contents": "%welcome.noSources%"
+      },
+      {
+        "view": "mlens.dependencies",
+        "contents": "%welcome.noDependencies%"
+      }
+    ],
+    "commands": [
+      {
+        "command": "mlens.refresh",
+        "title": "%command.refresh%",
+        "category": "M Lens",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "mlens.extractPbipQueries",
+        "title": "%command.extractPbipQueries%",
+        "category": "M Lens",
+        "icon": "$(arrow-circle-down)"
+      },
+      {
+        "command": "mlens.previewPbipApply",
+        "title": "%command.previewPbipApply%",
+        "category": "M Lens",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "mlens.applyPbipQueries",
+        "title": "%command.applyPbipQueries%",
+        "category": "M Lens",
+        "icon": "$(arrow-circle-up)"
+      },
+      {
+        "command": "mlens.extractPbixQueries",
+        "title": "%command.extractPbixQueries%",
+        "category": "M Lens"
+      },
+      {
+        "command": "mlens.evaluateQuery",
+        "title": "%command.evaluateQuery%",
+        "category": "M Lens",
+        "icon": "$(play)"
+      },
+      {
+        "command": "mlens.managePreviewCredentials",
+        "title": "%command.managePreviewCredentials%",
+        "category": "M Lens",
+        "icon": "$(key)"
+      },
+      {
+        "command": "mlens.lintWorkspace",
+        "title": "%command.lintWorkspace%",
+        "category": "M Lens"
+      },
+      {
+        "command": "mlens.showWorkspaceReport",
+        "title": "%command.showWorkspaceReport%",
+        "category": "M Lens"
+      },
+      {
+        "command": "mlens.showLog",
+        "title": "%command.showLog%",
+        "category": "M Lens"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "mlens.refresh",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "mlens.extractPbipQueries",
+          "when": "view == mlens.overview && mlens.hasTmdl",
+          "group": "navigation@1"
+        },
+        {
+          "command": "mlens.applyPbipQueries",
+          "when": "view == mlens.overview && mlens.hasExtraction",
+          "group": "navigation@2"
+        },
+        {
+          "command": "mlens.refresh",
+          "when": "view == mlens.overview || view == mlens.dataSources || view == mlens.dependencies",
+          "group": "navigation@9"
+        },
+        {
+          "command": "mlens.previewPbipApply",
+          "when": "view == mlens.overview && mlens.hasExtraction",
+          "group": "1_pbip@1"
+        },
+        {
+          "command": "mlens.extractPbixQueries",
+          "when": "view == mlens.overview",
+          "group": "1_pbip@2"
+        },
+        {
+          "command": "mlens.lintWorkspace",
+          "when": "view == mlens.overview",
+          "group": "2_queries@1"
+        },
+        {
+          "command": "mlens.managePreviewCredentials",
+          "when": "view == mlens.overview",
+          "group": "2_queries@2"
+        },
+        {
+          "command": "mlens.showWorkspaceReport",
+          "when": "view == mlens.overview",
+          "group": "3_info@1"
+        },
+        {
+          "command": "mlens.showLog",
+          "when": "view == mlens.overview",
+          "group": "3_info@2"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "mlens.evaluateQuery",
+          "when": "editorLangId == powerquery"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "mlens.extractPbixQueries",
+          "when": "resourceExtname == .pbix || resourceExtname == .pbit",
+          "group": "mlens"
+        },
+        {
+          "command": "mlens.extractPbipQueries",
+          "when": "resourceExtname == .pbip",
+          "group": "mlens"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "M Lens",
+      "properties": {
+        "mlens.lint.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.lint.enabled%"
+        },
+        "mlens.lint.unusedStep": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "warning",
+          "description": "%config.lint.unusedStep%"
+        },
+        "mlens.lint.tableBuffer": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "info",
+          "description": "%config.lint.tableBuffer%"
+        },
+        "mlens.lint.hardcodedPath": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "warning",
+          "description": "%config.lint.hardcodedPath%"
+        },
+        "mlens.lint.genericStepName": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "hint",
+          "description": "%config.lint.genericStepName%"
+        },
+        "mlens.lint.sensitiveLiteral": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "warning",
+          "description": "%config.lint.sensitiveLiteral%"
+        },
+        "mlens.lint.localhostSource": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "warning",
+          "description": "%config.lint.localhostSource%"
+        },
+        "mlens.lint.webContentsOptions": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "info",
+          "description": "%config.lint.webContentsOptions%"
+        },
+        "mlens.lint.removeColumnsRisk": {
+          "type": "string",
+          "enum": ["off", "hint", "info", "warning", "error"],
+          "default": "hint",
+          "description": "%config.lint.removeColumnsRisk%"
+        },
+        "mlens.files.lintMFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.files.lintMFiles%"
+        },
+        "mlens.preview.pqTestPath": {
+          "type": "string",
+          "default": "",
+          "description": "%config.preview.pqTestPath%"
+        },
+        "mlens.preview.maxRows": {
+          "type": "number",
+          "default": 500,
+          "minimum": 1,
+          "description": "%config.preview.maxRows%"
+        },
+        "mlens.preview.injectCredentials": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.preview.injectCredentials%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/run-tests.mjs && node scripts/smoke-panel.mjs && node scripts/smoke-tmdl.mjs && node scripts/check-l10n.mjs",
+    "vscode:prepublish": "npm run typecheck && npm run build",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.24.0",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "@microsoft/powerquery-parser": "^0.15.0",
+    "adm-zip": "^0.5.16"
+  }
+}

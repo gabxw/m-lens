@@ -1,0 +1,19 @@
+table Vendas
+	lineageTag: 1a2b3c4d
+
+	column Valor
+		dataType: double
+		lineageTag: 5e6f7a8b
+		summarizeBy: sum
+		sourceColumn: Valor
+
+	partition Vendas = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents("C:\Dados\vendas.csv"), [Delimiter = ";"]),
+					#"Changed Type" = Table.TransformColumnTypes(Source, {{"Valor", type number}})
+				in
+					#"Changed Type"
+
+	annotation PBI_ResultType = Table
